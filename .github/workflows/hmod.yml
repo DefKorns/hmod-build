@@ -1,0 +1,92 @@
+name: hmod
+
+on:
+  workflow_call:
+    inputs:
+      release-name:
+        description: Release title prefix (the tag is appended)
+        type: string
+        required: true
+      make:
+        description: One make invocation per line (arguments only)
+        type: string
+        default: hmod
+      docker:
+        description: Run make inside the classicmini-cross-toolchain image (needs a toolchain/ submodule)
+        type: boolean
+        default: false
+    secrets:
+      VENDOR_REPO:
+        required: false
+      VENDOR_REPO_PAT:
+        required: false
+      HUB_DISPATCH_TOKEN:
+        required: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          submodules: recursive
+          fetch-depth: 0
+
+      - name: Build toolchain image
+        if: inputs.docker
+        env:
+          VENDOR_REPO: ${{ secrets.VENDOR_REPO }}
+          VENDOR_REPO_PAT: ${{ secrets.VENDOR_REPO_PAT }}
+        run: |
+          git clone --depth 1 "https://x-access-token:${VENDOR_REPO_PAT}@github.com/${VENDOR_REPO}.git" toolchain/vendor
+          docker build -f toolchain/Dockerfile.jessie-armhf -t classicmini-cross-toolchain:jessie-armhf toolchain
+
+      - name: Build hmods
+        env:
+          MAKE_LINES: ${{ inputs.make }}
+          IN_DOCKER: ${{ inputs.docker }}
+        run: |
+          printf '%s\n' "$MAKE_LINES" | while IFS= read -r args; do
+            [ -n "$args" ] || continue
+            if [ "$IN_DOCKER" = true ]; then
+              docker run --rm -v "$PWD:/src" -w /src classicmini-cross-toolchain:jessie-armhf \
+                sh -c "git config --global --add safe.directory '*' 2>/dev/null; make CROSS_PREFIX=arm-linux-gnueabihf- $args"
+            else
+              make $args
+            fi
+          done
+          ls -l out/*.hmod
+
+      - uses: actions/upload-artifact@v7
+        with:
+          name: hmods
+          path: out/*.hmod
+
+  release:
+    needs: build
+    if: startsWith(github.ref, 'refs/tags/v')
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/download-artifact@v8
+        with:
+          name: hmods
+          path: out
+
+      - uses: softprops/action-gh-release@v3
+        with:
+          name: ${{ inputs.release-name }} ${{ github.ref_name }}
+          files: out/*.hmod
+          generate_release_notes: true
+          prerelease: ${{ contains(github.ref_name, '-') }}
+
+      - name: Rebuild the hakchi-repo hub
+        env:
+          GH_TOKEN: ${{ secrets.HUB_DISPATCH_TOKEN }}
+        run: |
+          if [ -z "$GH_TOKEN" ]; then
+            echo "HUB_DISPATCH_TOKEN not set - the hub picks this release up on its daily build"
+            exit 0
+          fi
+          gh api repos/DefKorns/hakchi-repo/dispatches -f event_type=hmod-released
