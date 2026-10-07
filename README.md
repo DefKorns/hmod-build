@@ -36,7 +36,7 @@ include hmod-build/hmod.mk
 | `MOD_CATEGORY` | - | `Category:` (the hakchi tab) |
 | `MOD_CREATOR` | `DefKorns` | |
 | `MOD_DIR` | `mod` | folder that becomes the hmod |
-| `MOD_DEPS` | | build outputs to make before packaging |
+| `MOD_DEPS` | | build outputs to make before packaging; the build fails if one under `MOD_DIR` ends up missing or empty in the hmod |
 | `MOD_EXCLUDE` | | file listing paths under `MOD_DIR` to leave out |
 | `MOD_VER` | git tag | override, e.g. `make MOD_VER=3.0.0-dev` |
 

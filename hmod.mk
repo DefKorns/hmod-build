@@ -16,6 +16,9 @@ $(HMOD): $(MOD_DEPS) FORCE
 	printf '%s\n' "---" "Name: $(MOD_NAME)" "Creator: $(MOD_CREATOR)" "Category: $(MOD_CATEGORY)" \
 	  "Version: $(MOD_VER)" "Built on: $$(date -u +'%Y-%m-%d %H:%M UTC')" "Git commit: $(GIT_COMMIT)" "---" > "$(HMOD_STAGE)/readme.md"
 	[ ! -f "$(MOD_DIR)/readme.md" ] || sed '1{/^# /d}' "$(MOD_DIR)/readme.md" >> "$(HMOD_STAGE)/readme.md"
+	@for dep in $(patsubst $(MOD_DIR)/%,%,$(filter $(MOD_DIR)/%,$(MOD_DEPS))); do \
+	  [ -s "$(HMOD_STAGE)/$$dep" ] || { echo "hmod.mk: $$dep is missing or empty in the hmod" >&2; exit 1; }; \
+	done
 	(cd "$(HMOD_STAGE)" && tar -czf - *) > "$@"
 	rm -rf "$(HMOD_STAGE)" "$(HMOD_STAGE).exclude"
 	@echo "$@ ($(MOD_VER))"
