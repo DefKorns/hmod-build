@@ -7,6 +7,7 @@ Shared versioning, packaging and release workflow for my hakchi hmods, so every 
 - **Version from the git tag only.** Tag `v3.0.0-alpha4` builds version `3.0.0-alpha4`; an untagged build is `3.0.0-alpha4-3-gabc1234` (`git describe`). No `VERSION` file.
 - **Fixed file name:** `out/<MOD_ID>.hmod`, no version in it. Hakchi uses the file name as the mod's id, so a versioned name would install every update as a separate mod.
 - **The same readme header:** Name, Creator, Category, Version, Built on, Git commit. The body is the mod's own `mod/readme.md`, without its leading `# title` line.
+- **A changelog in pre-release readmes:** when the version has a `-` (`3.0.0-alpha4`, or an untagged build), the readme gets a `## Changes since <previous tag>` list of the commit subjects since that tag, so testers see what changed. Stable releases don't get it.
 - **A release per `v*` tag** (pre-release when the tag has a `-`), and a rebuild of the [hakchi-repo](https://github.com/DefKorns/hakchi-repo) hub right after.
 
 ## Use it in a mod
