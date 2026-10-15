@@ -12,7 +12,7 @@ on:
         type: string
         default: hmod
       docker:
-        description: Run make inside the classicmini-cross-toolchain image (needs a toolchain/ submodule)
+        description: Run make inside the classicmini-cross-toolchain image (needs vendor/hmod-build)
         type: boolean
         default: false
     secrets:
@@ -30,7 +30,7 @@ jobs:
 
       - name: Toolchain image
         if: inputs.docker
-        run: echo "TOOLCHAIN_IMAGE=$(sh hmod-build/toolchain-image.sh)" >> "$GITHUB_ENV"
+        run: echo "TOOLCHAIN_IMAGE=$(sh vendor/hmod-build/toolchain-image.sh)" >> "$GITHUB_ENV"
 
       - name: Build hmods
         env:

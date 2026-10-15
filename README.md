@@ -13,10 +13,11 @@ Shared versioning, packaging and release workflow for my hakchi hmods, so every 
 
 ## Use it in a mod
 
-Add it as a submodule:
+Add it as a submodule under `vendor/`, checked out at a release tag:
 
 ```sh
-git submodule add https://github.com/DefKorns/hmod-build.git hmod-build
+git submodule add https://github.com/DefKorns/hmod-build.git vendor/hmod-build
+git -C vendor/hmod-build checkout v1.0.0
 ```
 
 `Makefile`:
@@ -28,7 +29,7 @@ MOD_CATEGORY := Options Menu - Addons
 MOD_DEPS     := mod/etc/options_menu/fonts/NotoSansJP-CJK.ttf
 
 all: hmod
-include hmod-build/hmod.mk
+include vendor/hmod-build/hmod.mk
 ```
 
 | Variable | Default | |
@@ -55,7 +56,7 @@ on:
   pull_request:
 jobs:
   hmod:
-    uses: DefKorns/hmod-build/.github/workflows/hmod.yml@master
+    uses: DefKorns/hmod-build/.github/workflows/hmod.yml@v1.0.0
     with:
       release-name: Options Menu Japanese Font Pack
     secrets: inherit
@@ -66,6 +67,24 @@ jobs:
 Inputs:
 
 - `make` - one make invocation per line (arguments only), default `hmod`. A mod with two variants lists both, e.g. `-f Makefile.docker` and `-f Makefile.docker FIX_LIBSTDCXX=1`.
-- `docker: true` - run make inside the [classicmini-cross-toolchain](https://github.com/DefKorns/classicmini-cross-toolchain) image (needs the `toolchain/` submodule). The image comes from `toolchain-image.sh`: pulled from GHCR for the submodule's commit, or built from it when not published.
+- `docker: true` - run make inside the [classicmini-cross-toolchain](https://github.com/DefKorns/classicmini-cross-toolchain) image pinned in `toolchain-image.sh`, pulled from GHCR.
+
+Keep the `uses:` tag and the submodule on the same release.
 
 The `HUB_DISPATCH_TOKEN` secret (a fine-grained token with *Contents: write* on hakchi-repo) makes the release rebuild the hub straight away; without it the hub catches up on its daily build.
+
+## Building locally
+
+`toolchain-image.sh` prints the pinned toolchain image, pulling it when missing, so a mod's `build.sh` can run:
+
+```sh
+IMAGE=$(sh vendor/hmod-build/toolchain-image.sh)
+docker run --rm -v "$PWD:/src" "$IMAGE" make CROSS_PREFIX=arm-linux-gnueabihf-
+```
+
+To try an unreleased toolchain, build it from a [classicmini-cross-toolchain](https://github.com/DefKorns/classicmini-cross-toolchain) checkout and point `TOOLCHAIN_IMAGE` at it:
+
+```sh
+docker build -f Dockerfile.jessie-armhf -t classicmini-cross-toolchain:local .
+TOOLCHAIN_IMAGE=classicmini-cross-toolchain:local ./build.sh
+```
