@@ -17,7 +17,7 @@ Add it as a submodule under `vendor/`, checked out at a release tag:
 
 ```sh
 git submodule add https://github.com/DefKorns/hmod-build.git vendor/hmod-build
-git -C vendor/hmod-build checkout v1.0.0
+git -C vendor/hmod-build checkout v1.1.0
 ```
 
 `Makefile`:
@@ -56,7 +56,7 @@ on:
   pull_request:
 jobs:
   hmod:
-    uses: DefKorns/hmod-build/.github/workflows/hmod.yml@v1.0.0
+    uses: DefKorns/hmod-build/.github/workflows/hmod.yml@v1.1.0
     with:
       release-name: Options Menu Japanese Font Pack
     secrets: inherit
@@ -75,12 +75,16 @@ The `HUB_DISPATCH_TOKEN` secret (a fine-grained token with *Contents: write* on 
 
 ## Building locally
 
-`toolchain-image.sh` prints the pinned toolchain image, pulling it when missing, so a mod's `build.sh` can run:
+`docker-make.sh` runs make in the pinned toolchain image (`toolchain-image.sh` prints it, pulling it when missing), so a mod's `build.sh` is:
 
 ```sh
-IMAGE=$(sh vendor/hmod-build/toolchain-image.sh)
-docker run --rm -v "$PWD:/src" "$IMAGE" make CROSS_PREFIX=arm-linux-gnueabihf-
+#!/usr/bin/env bash
+set -euo pipefail
+[ -f vendor/hmod-build/docker-make.sh ] || git submodule update --init vendor/hmod-build
+sh vendor/hmod-build/docker-make.sh "$@"
 ```
+
+It mounts the outermost git work tree, so a mod checked out as a submodule of another repo still gets its version from `git describe`. It also deletes `*.o` files under `vendor/` afterwards.
 
 To try an unreleased toolchain, build it from a [classicmini-cross-toolchain](https://github.com/DefKorns/classicmini-cross-toolchain) checkout and point `TOOLCHAIN_IMAGE` at it:
 
