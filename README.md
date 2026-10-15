@@ -66,6 +66,6 @@ jobs:
 Inputs:
 
 - `make` - one make invocation per line (arguments only), default `hmod`. A mod with two variants lists both, e.g. `-f Makefile.docker` and `-f Makefile.docker FIX_LIBSTDCXX=1`.
-- `docker: true` - run make inside the [classicmini-cross-toolchain](https://github.com/DefKorns/classicmini-cross-toolchain) image (needs the `toolchain/` submodule and the `VENDOR_REPO`/`VENDOR_REPO_PAT` secrets).
+- `docker: true` - run make inside the [classicmini-cross-toolchain](https://github.com/DefKorns/classicmini-cross-toolchain) image (needs the `toolchain/` submodule).
 
 The `HUB_DISPATCH_TOKEN` secret (a fine-grained token with *Contents: write* on hakchi-repo) makes the release rebuild the hub straight away; without it the hub catches up on its daily build.

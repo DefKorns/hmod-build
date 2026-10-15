@@ -16,10 +16,6 @@ on:
         type: boolean
         default: false
     secrets:
-      VENDOR_REPO:
-        required: false
-      VENDOR_REPO_PAT:
-        required: false
       HUB_DISPATCH_TOKEN:
         required: false
 
@@ -34,11 +30,7 @@ jobs:
 
       - name: Build toolchain image
         if: inputs.docker
-        env:
-          VENDOR_REPO: ${{ secrets.VENDOR_REPO }}
-          VENDOR_REPO_PAT: ${{ secrets.VENDOR_REPO_PAT }}
         run: |
-          git clone --depth 1 "https://x-access-token:${VENDOR_REPO_PAT}@github.com/${VENDOR_REPO}.git" toolchain/vendor
           docker build -f toolchain/Dockerfile.jessie-armhf -t classicmini-cross-toolchain:jessie-armhf toolchain
 
       - name: Build hmods
