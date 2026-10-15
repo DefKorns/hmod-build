@@ -28,10 +28,9 @@ jobs:
           submodules: recursive
           fetch-depth: 0
 
-      - name: Build toolchain image
+      - name: Toolchain image
         if: inputs.docker
-        run: |
-          docker build -f toolchain/Dockerfile.jessie-armhf -t classicmini-cross-toolchain:jessie-armhf toolchain
+        run: echo "TOOLCHAIN_IMAGE=$(sh hmod-build/toolchain-image.sh)" >> "$GITHUB_ENV"
 
       - name: Build hmods
         env:
@@ -41,7 +40,7 @@ jobs:
           printf '%s\n' "$MAKE_LINES" | while IFS= read -r args; do
             [ -n "$args" ] || continue
             if [ "$IN_DOCKER" = true ]; then
-              docker run --rm -v "$PWD:/src" -w /src classicmini-cross-toolchain:jessie-armhf \
+              docker run --rm -v "$PWD:/src" -w /src "$TOOLCHAIN_IMAGE" \
                 sh -c "git config --global --add safe.directory '*' 2>/dev/null; make CROSS_PREFIX=arm-linux-gnueabihf- $args"
             else
               make $args
