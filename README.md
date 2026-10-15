@@ -8,6 +8,7 @@ Shared versioning, packaging and release workflow for my hakchi hmods, so every 
 - **Fixed file name:** `out/<MOD_ID>.hmod`, no version in it. Hakchi uses the file name as the mod's id, so a versioned name would install every update as a separate mod.
 - **The same readme header:** Name, Creator, Category, Version, Built on, Git commit. The body is the mod's own `mod/readme.md`, without its leading `# title` line.
 - **A changelog in pre-release readmes:** when the version has a `-` (`3.0.0-alpha4`, or an untagged build), the readme gets a `## Changes since <previous tag>` list of the commit subjects since that tag, so testers see what changed. Stable releases don't get it.
+- **A smoke test of the packaged files** (`hmod-check.sh`, run before the hmod is written): the build fails on a shell syntax error in `install`, `uninstall` or any `sh`/`bash`/`ash` script, CRLF line endings in a text file, an ELF binary that isn't 32-bit ARM, or a `*.o`, `.DS_Store`, `Thumbs.db` or `desktop.ini` leftover.
 - **A release per `v*` tag** (pre-release when the tag has a `-`), and a rebuild of the [hakchi-repo](https://github.com/DefKorns/hakchi-repo) hub right after.
 
 ## Use it in a mod

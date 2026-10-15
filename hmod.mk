@@ -1,3 +1,4 @@
+HMOD_BUILD  := $(dir $(lastword $(MAKEFILE_LIST)))
 MOD_CREATOR ?= DefKorns
 MOD_DIR     ?= mod
 OUT         ?= out
@@ -23,6 +24,7 @@ endif
 	@for dep in $(patsubst $(MOD_DIR)/%,%,$(filter $(MOD_DIR)/%,$(MOD_DEPS))); do \
 	  [ -s "$(HMOD_STAGE)/$$dep" ] || { echo "hmod.mk: $$dep is missing or empty in the hmod" >&2; exit 1; }; \
 	done
+	sh "$(HMOD_BUILD)hmod-check.sh" "$(HMOD_STAGE)"
 	(cd "$(HMOD_STAGE)" && tar -czf - *) > "$@"
 	rm -rf "$(HMOD_STAGE)" "$(HMOD_STAGE).exclude"
 	@echo "$@ ($(MOD_VER))"
