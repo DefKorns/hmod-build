@@ -17,7 +17,7 @@ Add it as a submodule under `vendor/`, checked out at a release tag:
 
 ```sh
 git submodule add https://github.com/DefKorns/hmod-build.git vendor/hmod-build
-git -C vendor/hmod-build checkout v1.1.0
+git -C vendor/hmod-build checkout v1.2.0
 ```
 
 `Makefile`:
@@ -56,7 +56,7 @@ on:
   pull_request:
 jobs:
   hmod:
-    uses: DefKorns/hmod-build/.github/workflows/hmod.yml@v1.1.0
+    uses: DefKorns/hmod-build/.github/workflows/hmod.yml@v1.2.0
     with:
       release-name: Options Menu Japanese Font Pack
     secrets: inherit
