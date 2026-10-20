@@ -69,6 +69,8 @@ Inputs:
 - `make` - one make invocation per line (arguments only), default `hmod`. A mod with two variants lists both, e.g. `-f Makefile.docker` and `-f Makefile.docker FIX_LIBSTDCXX=1`.
 - `docker: true` - run make inside the [classicmini-cross-toolchain](https://github.com/DefKorns/classicmini-cross-toolchain) image pinned in `toolchain-image.sh`, pulled from GHCR.
 
+Release notes: write `release-notes/<tag>.md` (e.g. `release-notes/v2.0.0.md`) before tagging and the release uses it as its body, followed by a `**Full Changelog**` compare link to the previous tag. Without that file the release gets GitHub's generated notes.
+
 Keep the `uses:` tag and the submodule on the same release.
 
 The `HUB_DISPATCH_TOKEN` secret (a fine-grained token with *Contents: write* on hakchi-repo) makes the release rebuild the hub straight away; without it the hub catches up on its daily build.

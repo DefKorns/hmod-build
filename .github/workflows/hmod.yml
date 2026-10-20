@@ -65,11 +65,38 @@ jobs:
           name: hmods
           path: out
 
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+          path: src
+
+      - name: Release notes
+        id: notes
+        working-directory: src
+        env:
+          TAG: ${{ github.ref_name }}
+          REPO: ${{ github.repository }}
+        run: |
+          file="release-notes/$TAG.md"
+          if [ ! -f "$file" ]; then
+            echo "No $file - using generated notes"
+            exit 0
+          fi
+          previous=$(git describe --tags --abbrev=0 "$TAG^" 2>/dev/null || true)
+          {
+            cat "$file"
+            if [ -n "$previous" ]; then
+              printf '\n**Full Changelog**: https://github.com/%s/compare/%s...%s\n' "$REPO" "$previous" "$TAG"
+            fi
+          } > "$RUNNER_TEMP/notes.md"
+          echo "path=$RUNNER_TEMP/notes.md" >> "$GITHUB_OUTPUT"
+
       - uses: softprops/action-gh-release@v3
         with:
           name: ${{ inputs.release-name }} ${{ github.ref_name }}
           files: out/*.hmod
-          generate_release_notes: true
+          body_path: ${{ steps.notes.outputs.path }}
+          generate_release_notes: ${{ steps.notes.outputs.path == '' }}
           prerelease: ${{ contains(github.ref_name, '-') }}
 
       - name: Rebuild the hakchi-repo hub
