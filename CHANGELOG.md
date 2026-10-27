@@ -1,5 +1,9 @@
 # Changelog
 
+## v1.6.0
+
+- Add `luajit-bc.sh` and `luajit.mk`, which compile Lua files to the LuaJIT 2.0 bytecode the minis load
+
 ## v1.5.0
 
 - Use hand-written release notes when present

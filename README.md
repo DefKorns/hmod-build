@@ -75,6 +75,10 @@ Keep the `uses:` tag and the submodule on the same release.
 
 The `HUB_DISPATCH_TOKEN` secret (a fine-grained token with *Contents: write* on hakchi-repo) makes the release rebuild the hub straight away; without it the hub catches up on its daily build.
 
+## Compiling Lua
+
+`luajit-bc.sh <source.lua> <output>` compiles a Lua file to the LuaJIT 2.0 bytecode the minis load. The 2.1 that distros ship writes another bytecode version, so it builds LuaJIT 2.0 at a fixed commit into `out/luajit` (needs `git`, `gcc` and `make`) and compiles with that. To build several files, list `<source.lua>:<output>` pairs in `LUAJIT_FILES` and `include vendor/hmod-build/luajit.mk` before `hmod.mk`: every output is built, added to `MOD_DEPS` and covered by `make compile`.
+
 ## Building locally
 
 `docker-make.sh` runs make in the pinned toolchain image (`toolchain-image.sh` prints it, pulling it when missing), so a mod's `build.sh` is:
