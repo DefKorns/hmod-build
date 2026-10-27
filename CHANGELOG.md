@@ -1,0 +1,29 @@
+# Changelog
+
+## v1.5.0
+
+- Use hand-written release notes when present
+
+## v1.4.0
+
+- Make the `.hmod` reproducible (fixed owner, mode, mtime and gzip header)
+
+## v1.3.0
+
+- Pin the toolchain image to v1.2.0 (Options Menu UI font)
+
+## v1.2.0
+
+- Pin the toolchain image to v1.1.0 (curl on mbedTLS)
+
+## v1.1.0
+
+- Add `docker-make.sh`, which mounts the outermost work tree so submodules get their version
+
+## v1.0.0
+
+- Shared versioning, packaging and release workflow for hmods
+- Fail the build when a `MOD_DEPS` output is missing or empty in the hmod
+- Fail the build on shell syntax errors, CRLF, non-ARM binaries and build leftovers
+- List the changes since the previous tag in pre-release readmes
+- Pull the toolchain image from GHCR, build it only when unpublished, and pin it by tag
