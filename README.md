@@ -33,7 +33,7 @@ include vendor/hmod-build/hmod.mk
 ```
 
 | Variable | Default | |
-|---|---|---|
+| --- | --- | --- |
 | `MOD_ID` | - | hmod file name and hakchi id |
 | `MOD_NAME` | - | `Name:` shown by hakchi |
 | `MOD_CATEGORY` | - | `Category:` (the hakchi tab) |
@@ -98,3 +98,7 @@ To try an unreleased toolchain, build it from a [classicmini-cross-toolchain](ht
 docker build -f Dockerfile.jessie-armhf -t classicmini-cross-toolchain:local .
 TOOLCHAIN_IMAGE=classicmini-cross-toolchain:local ./build.sh
 ```
+
+## Contributing
+
+[pre-commit](https://pre-commit.com/) checks the files you stage before each commit. Set it up once per clone with `pip install pre-commit` and `pre-commit install`; `pre-commit run --all-files` checks everything.
