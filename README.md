@@ -1,5 +1,7 @@
 # hmod-build
 
+[![pre-commit](https://img.shields.io/badge/pre--commit-enabled-brightgreen?logo=pre-commit)](https://github.com/pre-commit/pre-commit)
+
 Shared versioning, packaging and release workflow for my hakchi hmods, so every mod is built the same way.
 
 ## What every mod gets
