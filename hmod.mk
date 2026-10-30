@@ -15,8 +15,8 @@ $(HMOD): $(MOD_DEPS) FORCE
 	rm -rf "$(HMOD_STAGE)" "$@"
 	mkdir -p "$(HMOD_STAGE)"
 	cd "$(MOD_DIR)" && tar -cf - $(if $(MOD_EXCLUDE),--exclude-from="$(CURDIR)/$(HMOD_STAGE).exclude") * | (cd "$(CURDIR)/$(HMOD_STAGE)" && tar -xf -)
-	printf '%s\n' "---" "Name: $(MOD_NAME)" "Creator: $(MOD_CREATOR)" "Category: $(MOD_CATEGORY)" \
-	  "Version: $(MOD_VER)" "Built on: $$(date -u -d @$(SOURCE_DATE_EPOCH) +'%Y-%m-%d %H:%M UTC')" "Git commit: $(GIT_COMMIT)" "---" > "$(HMOD_STAGE)/readme.md"
+	printf '%s\n' "---" "Name: $(MOD_NAME)" "Creator: $(MOD_CREATOR)" $(if $(MOD_BUILD_BY),"Build by: $(MOD_BUILD_BY)") "Category: $(MOD_CATEGORY)" \
+	  "Version: $(MOD_VER)" "Built on: $$(date -u -d @$(SOURCE_DATE_EPOCH) +'%Y-%m-%d %H:%M UTC')" "Git commit: $(GIT_COMMIT)" $(if $(MOD_EMULATED_SYSTEM),"Emulated System: $(MOD_EMULATED_SYSTEM)") "---" > "$(HMOD_STAGE)/readme.md"
 ifneq ($(findstring -,$(MOD_VER)),)
 	prev=$$(git describe --tags --abbrev=0 --match 'v[0-9]*' HEAD^ 2>/dev/null) && \
 	  { printf '%s\n' "" "## Changes since $$prev" ""; git log --no-merges --reverse --format='- %s' "$$prev..HEAD"; echo; } >> "$(HMOD_STAGE)/readme.md" || true

@@ -1,5 +1,9 @@
 # Changelog
 
+## v1.8.0
+
+- `MOD_BUILD_BY` and `MOD_EMULATED_SYSTEM` add `Build by:` and `Emulated System:` to the readme header; the hakchi client groups a tab by `Emulated System`
+
 ## v1.7.2
 
 - Pin the toolchain image to v1.3.0, which has a g++ for tools that have to run on the build machine

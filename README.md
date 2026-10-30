@@ -47,7 +47,9 @@ include vendor/hmod-build/hmod.mk
 | `MOD_ID` | - | hmod file name and hakchi id |
 | `MOD_NAME` | - | `Name:` shown by hakchi |
 | `MOD_CATEGORY` | - | `Category:` (the hakchi tab) |
-| `MOD_CREATOR` | `DefKorns` | |
+| `MOD_CREATOR` | `DefKorns` | `Creator:`, the author of what the hmod packages; for a port, the original authors |
+| `MOD_BUILD_BY` | | `Build by:`, after `Creator:`; left out when empty |
+| `MOD_EMULATED_SYSTEM` | | `Emulated System:`, last line of the header; the hakchi client groups a tab by it (left out when empty) |
 | `MOD_DIR` | `mod` | folder that becomes the hmod |
 | `MOD_DEPS` | | build outputs to make before packaging; the build fails if one under `MOD_DIR` ends up missing or empty in the hmod |
 | `MOD_EXCLUDE` | | file listing paths under `MOD_DIR` to leave out |
