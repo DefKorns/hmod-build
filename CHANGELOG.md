@@ -1,5 +1,9 @@
 # Changelog
 
+## v1.7.2
+
+- Pin the toolchain image to v1.3.0, which has a g++ for tools that have to run on the build machine
+
 ## v1.7.1
 
 - Run on `ubuntu-24.04` instead of `ubuntu-latest`, which moves to Ubuntu 26
