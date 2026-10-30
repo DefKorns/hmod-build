@@ -1,5 +1,10 @@
 # Changelog
 
+## v1.7.1
+
+- Run on `ubuntu-24.04` instead of `ubuntu-latest`, which moves to Ubuntu 26
+- Try the release step once more after 30 seconds when the GitHub API drops the connection
+
 ## v1.7.0
 
 - `hmod-check.sh` also checks hakchi's install rules: preinit names, final newline, `exit`, top-level `return`, rootfs prefix, capitalised system folders, nested `.hmod`, blacklisted `MOD_ID`; warns on loose root files, non-overlay folders, unknown UI folders and an `install` without `return`
