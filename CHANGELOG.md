@@ -1,5 +1,9 @@
 # Changelog
 
+## v1.7.0
+
+- `hmod-check.sh` also checks hakchi's install rules: preinit names, final newline, `exit`, top-level `return`, rootfs prefix, capitalised system folders, nested `.hmod`, blacklisted `MOD_ID`; warns on loose root files, non-overlay folders, unknown UI folders and an `install` without `return`
+
 ## v1.6.0
 
 - Add `luajit-bc.sh` and `luajit.mk`, which compile Lua files to the LuaJIT 2.0 bytecode the minis load

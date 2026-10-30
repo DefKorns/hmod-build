@@ -25,7 +25,7 @@ endif
 	@for dep in $(patsubst $(MOD_DIR)/%,%,$(filter $(MOD_DIR)/%,$(MOD_DEPS))); do \
 	  [ -s "$(HMOD_STAGE)/$$dep" ] || { echo "hmod.mk: $$dep is missing or empty in the hmod" >&2; exit 1; }; \
 	done
-	sh "$(HMOD_BUILD)hmod-check.sh" "$(HMOD_STAGE)"
+	sh "$(HMOD_BUILD)hmod-check.sh" "$(HMOD_STAGE)" "$(MOD_ID)"
 	cd "$(HMOD_STAGE)" && find . -type d -exec chmod 755 {} + && find . -type f -exec chmod 644 {} + && 	  find . -type f \( -name install -o -name uninstall -o -exec sh -c 'head -c 4 "$$1" | grep -aq "^#!\|^.ELF"' _ {} \; \) -exec chmod 755 {} +
 	cd "$(HMOD_STAGE)" && find . -mindepth 1 | sed 's,^./,,' | LC_ALL=C sort | tar --no-recursion --owner=0 --group=0 --numeric-owner --mtime=@$(SOURCE_DATE_EPOCH) -cf ../.tmp-$(MOD_ID).tar -T -
 	gzip -n < "$(OUT)/.tmp-$(MOD_ID).tar" > "$@" && rm -f "$(OUT)/.tmp-$(MOD_ID).tar"

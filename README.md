@@ -11,6 +11,14 @@ Shared versioning, packaging and release workflow for my hakchi hmods, so every 
 - **The same readme header:** Name, Creator, Category, Version, Built on, Git commit. The body is the mod's own `mod/readme.md`, without its leading `# title` line.
 - **A changelog in pre-release readmes:** when the version has a `-` (`3.0.0-alpha4`, or an untagged build), the readme gets a `## Changes since <previous tag>` list of the commit subjects since that tag, so testers see what changed. Stable releases don't get it.
 - **A smoke test of the packaged files** (`hmod-check.sh`, run before the hmod is written): the build fails on a shell syntax error in `install`, `uninstall` or any `sh`/`bash`/`ash` script, CRLF line endings in a text file, an ELF binary that isn't 32-bit ARM, or a `*.o`, `.DS_Store`, `Thumbs.db` or `desktop.ini` leftover.
+- **hakchi install rules**, taken from the console's `b0030_package` and `preinit`. The build also fails on:
+  - a preinit script that hakchi never runs (not `b????_*` / `p????_*`, or in a subfolder), has no final newline, or is binary;
+  - `exit` in a preinit, `install`, `uninstall` or `transfer` script;
+  - `return` outside a function in a preinit script (hakchi joins every preinit script into one file, so it skips the scripts after it);
+  - a path that already includes the hakchi rootfs, a capitalised system folder (`Usr/`), or a nested `.hmod`;
+  - a `MOD_ID` on hakchi's blacklist.
+
+  Warnings only: loose files at the package root, top-level folders hakchi doesn't overlay (`/var` and `/tmp` are mounted over at boot), `usr/share/ui/<x>` folders no console reads, and an `install` that doesn't end with `return`.
 - **A release per `v*` tag** (pre-release when the tag has a `-`), and a rebuild of the [hakchi-repo](https://github.com/DefKorns/hakchi-repo) hub right after.
 
 ## Use it in a mod
