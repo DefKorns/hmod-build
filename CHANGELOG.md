@@ -1,5 +1,10 @@
 # Changelog
 
+## v1.8.1
+
+- The mod's own readme comes before the `## Changes since` list, so a banner or description stays at the top
+- A build from a dirty tree prints `git status` to show what changed
+
 ## v1.8.0
 
 - `MOD_BUILD_BY` and `MOD_EMULATED_SYSTEM` add `Build by:` and `Emulated System:` to the readme header; the hakchi client groups a tab by `Emulated System`
