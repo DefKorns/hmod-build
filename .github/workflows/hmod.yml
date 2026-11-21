@@ -15,6 +15,10 @@ on:
         description: Run make inside the classicmini-cross-toolchain image (needs vendor/hmod-build)
         type: boolean
         default: false
+      pre-build:
+        description: Shell command run on the runner before make, e.g. a build that needs other images than the toolchain one
+        type: string
+        default: ""
     secrets:
       HUB_DISPATCH_TOKEN:
         required: false
@@ -31,6 +35,12 @@ jobs:
       - name: Toolchain image
         if: inputs.docker
         run: echo "TOOLCHAIN_IMAGE=$(sh vendor/hmod-build/toolchain-image.sh)" >> "$GITHUB_ENV"
+
+      - name: Pre-build
+        if: inputs.pre-build != ''
+        env:
+          PRE_BUILD: ${{ inputs.pre-build }}
+        run: sh -c "$PRE_BUILD"
 
       - name: Build hmods
         env:

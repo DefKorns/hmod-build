@@ -1,5 +1,9 @@
 # Changelog
 
+## v1.9.0
+
+- New `pre-build` input: a shell command run on the runner before `make`, for mods that build part of their output in another image
+
 ## v1.8.1
 
 - The mod's own readme comes before the `## Changes since` list, so a banner or description stays at the top
