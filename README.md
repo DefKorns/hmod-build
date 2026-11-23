@@ -80,6 +80,7 @@ Inputs:
 
 - `make` - one make invocation per line (arguments only), default `hmod`. A mod with two variants lists both, e.g. `-f Makefile.docker` and `-f Makefile.docker FIX_LIBSTDCXX=1`.
 - `docker: true` - run make inside the [classicmini-cross-toolchain](https://github.com/DefKorns/classicmini-cross-toolchain) image pinned in `toolchain-image.sh`, pulled from GHCR.
+- `artifacts` - a name pattern (e.g. `cores-*`) of artifacts uploaded by earlier jobs of the caller, downloaded and merged into `out/` before the build. With it a mod builds its parts in parallel jobs and this workflow only packages them.
 - `pre-build` - a shell command run on the runner before `make`, for a build that needs more than the toolchain image. A mod whose cores need another image builds them there and touches the file `make` would build, e.g. `sh docker-build.sh && touch out/.built`.
 
 Release notes: write `release-notes/<tag>.md` (e.g. `release-notes/v2.0.0.md`) before tagging and the release uses it as its body, followed by a `**Full Changelog**` compare link to the previous tag. Without that file the release gets GitHub's generated notes.

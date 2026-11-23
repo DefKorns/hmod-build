@@ -1,5 +1,9 @@
 # Changelog
 
+## v1.10.0
+
+- New `artifacts` input: downloads the artifacts of earlier jobs of the caller into `out/` before the build, so a mod can build its parts in parallel jobs
+
 ## v1.9.0
 
 - New `pre-build` input: a shell command run on the runner before `make`, for mods that build part of their output in another image

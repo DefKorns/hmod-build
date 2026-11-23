@@ -15,6 +15,10 @@ on:
         description: Run make inside the classicmini-cross-toolchain image (needs vendor/hmod-build)
         type: boolean
         default: false
+      artifacts:
+        description: Name pattern of artifacts from earlier jobs of the caller, downloaded and merged into out/ before the build
+        type: string
+        default: ""
       pre-build:
         description: Shell command run on the runner before make, e.g. a build that needs other images than the toolchain one
         type: string
@@ -31,6 +35,13 @@ jobs:
         with:
           submodules: recursive
           fetch-depth: 0
+
+      - uses: actions/download-artifact@v8
+        if: inputs.artifacts != ''
+        with:
+          pattern: ${{ inputs.artifacts }}
+          merge-multiple: true
+          path: out
 
       - name: Toolchain image
         if: inputs.docker
