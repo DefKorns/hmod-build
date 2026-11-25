@@ -1,5 +1,9 @@
 # Changelog
 
+## v1.10.1
+
+- `hmod-check.sh` skips the CRLF check for a file with control bytes, so binary data such as lookup tables that `grep -I` takes for text no longer fails the build
+
 ## v1.10.0
 
 - New `artifacts` input: downloads the artifacts of earlier jobs of the caller into `out/` before the build, so a mod can build its parts in parallel jobs

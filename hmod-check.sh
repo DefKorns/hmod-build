@@ -45,6 +45,10 @@ byte() {
   od -An -tu1 -j"$2" -N1 "$1" | tr -d ' '
 }
 
+hasControlBytes() {
+  [ "$(LC_ALL=C tr -d '\011\012\014\015\033\040-\377' < "$1" | head -c 1 | wc -c)" -gt 0 ]
+}
+
 find . -type f | sed 's#^\./##' | sort > "${TMPDIR:-/tmp}/hmod-check.$$"
 while IFS= read -r f; do
   case ${f##*/} in
@@ -106,6 +110,7 @@ while IFS= read -r f; do
   fi
 
   grep -Iq '' "$f" 2>/dev/null || continue
+  ! hasControlBytes "$f" || continue
   grep -Uq "$cr" "$f" && err "$f: CRLF line endings"
 
   case $f in
